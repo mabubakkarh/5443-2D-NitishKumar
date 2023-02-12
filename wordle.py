@@ -40,19 +40,6 @@ pygame.display.set_caption("Wordle")
 img = pygame.image.load("wordle_edit.png")
 pygame.display.set_icon(img)
 
-# Load image
-image = pygame.image.load('wordle_edit.png')
-  
-# Set the size for the image
-DEFAULT_IMAGE_SIZE = (700, 120)
-
-# Set a default position
-DEFAULT_IMAGE_POSITION = (140,0)
-  
-# Scale the image to your needed size
-image = pygame.transform.scale(image, DEFAULT_IMAGE_SIZE)
-screen.blit(image, DEFAULT_IMAGE_POSITION)
-
 filename="words.csv"
 
 with open('words.csv', mode='r') as infile:
@@ -78,16 +65,23 @@ grid_data = [['' for x in range(w)] for y in range(h)]
 grid_color = [[0 for x in range(w)] for y in range(h)]
 
 class pop_up:
+    def __init__(self,image_game, i_size_x, i_size_y, i_pos_x, i_pos_y):
+        self.image_game = image_game
+        self.i_size_x = i_size_x
+        self.i_size_y = i_size_y
+        self.i_pos_x = i_pos_x
+        self.i_pos_y = i_pos_y
+
     def draw_popup(self):
-        
+
         # Load image
-        self.image_wel = pygame.image.load('welcome_msg.png')
+        self.image_wel = pygame.image.load(self.image_game)
             
         # Set the size for the image
-        self.DEFAULT_IMAGE_SIZE = (250, 100)
+        self.DEFAULT_IMAGE_SIZE = (self.i_size_x, self.i_size_y)
 
         # Set a default position
-        self.DEFAULT_IMAGE_POSITION = (375,400)
+        self.DEFAULT_IMAGE_POSITION = (self.i_pos_x, self.i_pos_y)
             
         # Scale the image to your needed size
         self.image = pygame.transform.scale(self.image_wel, self.DEFAULT_IMAGE_SIZE)
@@ -118,8 +112,6 @@ def get_cord(pos):
     global y
     y = pos[1]//dif 
     x = pos[0]//dif
-    # print(x) 
-    # print(y) 
 
 def draw_val(data):
     x_cord = int(x)
@@ -156,12 +148,27 @@ def validate():
 timer_event = pygame.USEREVENT+1
 pygame.time.set_timer(timer_event,1000)
 
-p1 = pop_up()
+heading = pop_up('wordle_edit.png',700,120,140,0)
+heading.draw_popup()
+
+intro_msg = pop_up('welcome_msg.png', 250, 100, 375,400)
+
+ques_mark_img = pop_up('question_mark.png',50, 50,900,30)
+ques_mark_img.draw_popup()
+
+info_img = pop_up('Instructions.png', 500, 590, 250,203)
+close_img =  pop_up('close.png', 36, 36, 710,202)
+
+won_img = pop_up('won.png', 300, 200, 350,350)
+# won_img = pop_up('won.png', 500, 700, 350,350)
+
 
 run = True
 flag1 = 0
 flag2 = 0
 t_flag = 0
+info_flag = 0
+won_flag = False
 
 
 while run:    
@@ -171,13 +178,14 @@ while run:
             run = False 
         if event.type == timer_event:
             if t_flag == 0:
-                p1.draw_popup()
+                intro_msg.draw_popup()
                 t_flag += 1
-            else:
+            elif not(won_flag):
                 draw()
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             get_cord(pos)
+            print(x_cord,' and ',y_cord)
             flag1 = 1
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
@@ -251,15 +259,23 @@ while run:
                     flag2 = 1
                     var_i_val+=1
                     var_j_val+=1
+            if x == 9 and y == 0:
+                pass
             
     x_cord = int(x)
     y_cord = int(y)
 
-    draw()
+
+    if x == 9 and y == 0:
+        info_img.draw_popup()
+        close_img.draw_popup()
+        info_flag = 1
+    if x == 7 and y == 2:
+        info_flag = 0
 
     if (x_cord >=2 and x_cord <=7) and ((y_cord >=2 and y_cord <=7)):
         # print(x_cord,' and ',y_cord)
-        if flag1 == 1:
+        if flag1 == 1 and info_flag == 0 and not(won_flag):
             draw_box()
         if value != 0:
             if (y_cord-2) >= var_j_val+1:
@@ -271,7 +287,6 @@ while run:
     if flag2 == 1:
         for j in range(0,6):
             x_val = var_j_val
-            # print("x_val is : ",x_val)
             if (guessWord[num].lower()).__contains__(grid_data[j][x_val].lower()):
                 if grid[j][x_val].lower() == grid_data[j][x_val].lower() and grid_data[j][x_val] !=  '':
                     grid_color[j][x_val] = 1
@@ -280,9 +295,16 @@ while run:
             else:
                 grid_color[j][x_val] = 3          
             validate()
+            for i in range(0,6):
+                won_flag = False
+                for j in range(0,6):
+                    if grid_color[i][j] == 1:
+                            won_flag = True
+                    if won_flag:
+                        won_img.draw_popup()
+                        break
     if x_cord != 7:
         flag2 = 0
-
 
     pygame.display.update()
 
