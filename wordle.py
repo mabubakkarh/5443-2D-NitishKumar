@@ -107,7 +107,6 @@ def draw():
     
         
 def get_cord(pos):
-    # print(pos)
     global x
     global y
     y = pos[1]//dif 
@@ -166,7 +165,6 @@ flag1 = 0
 flag2 = 0
 t_flag = 0
 won_flag = False
-
 
 while run:    
     for event in pygame.event.get():
@@ -256,14 +254,9 @@ while run:
                     flag2 = 1
                     var_i_val+=1
                     var_j_val+=1
-            if x == 9 and y == 0:
-                pass
             
     x_cord = int(x)
     y_cord = int(y)
-
-    # draw()
-    # won_img.draw_popup()
 
     if x == 9 and y == 2:
         info_img.draw_popup()
@@ -289,8 +282,10 @@ while run:
                 elif grid[j][x_val].lower() != grid_data[j][x_val].lower() and grid_data[j][x_val] !=  '':
                     grid_color[j][x_val] = 2 
             else:
-                grid_color[j][x_val] = 3          
+                grid_color[j][x_val] = 3   
+                       
             validate()
+
         for i in range(0,6):
             count = 0
             for j in range(0,6):
@@ -301,7 +296,6 @@ while run:
                 won_flag = True
                 break
             
-
     if x_cord != 7:
         flag2 = 0
 
