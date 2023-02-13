@@ -25,10 +25,11 @@ var_j_val = -1
 # predefined colours
 BLUE  = (0, 0, 255)
 RED   = (255, 0, 0)
-GREEN = (0, 255, 0)
+GREEN = (92, 181, 87)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 ORANGE = (252, 194, 3)
+GRAY = (186, 185, 181)
 
 
 font1 = pygame.font.SysFont("comicsans",40)
@@ -136,7 +137,7 @@ def validate():
                 text1 = font1.render(str(grid_data[i-2][j-2]),1,RED)
                 screen.blit(text1,((i)*dif+35 , (j)*dif+20))
             elif grid_color[i-2][j-2] == 3:
-                pygame.draw.rect(screen,BLUE,(i*dif,j*dif,dif+1,dif+1))
+                pygame.draw.rect(screen,GRAY,(i*dif,j*dif,dif+1,dif+1))
                 text1 = font1.render(str(grid_data[i-2][j-2]),1,RED)
                 screen.blit(text1,((i)*dif+35 , (j)*dif+20))
     for i in range(2,9):
@@ -155,14 +156,10 @@ intro_msg = pop_up('welcome_msg.png', 250, 100, 375,400)
 ques_mark_img = pop_up('question_mark.png',50, 50,930,195)
 ques_mark_img.draw_popup()
 
-# info_img = pop_up('Instructions.png', 500, 590, 250,203)
-# info_img = pop_up('Instruction2.png', 500, 200, 250,0)
 info_img = pop_up('Instruction2.png', 450, 95, 280,702)
 close_img =  pop_up('close.png', 36, 36, 695,701)
 
-won_img = pop_up('won.png', 300, 200, 600,450)
-# won_img = pop_up('won.png', 500, 700, 350,350)
-
+won_img = pop_up('won.png', 300, 200, 350,350)
 
 run = True
 flag1 = 0
@@ -264,18 +261,9 @@ while run:
             
     x_cord = int(x)
     y_cord = int(y)
-    for i in range(0,6):
-        count = 0
-        for j in range(0,6):
-            if grid_color[i][j] == 1:
-                count += 1
-        if count == 6:
-            won_img.draw_popup()
-            won_flag = True
-            print('executed!!')
-            break
 
     # draw()
+    # won_img.draw_popup()
 
     if x == 9 and y == 2:
         info_img.draw_popup()
@@ -303,6 +291,17 @@ while run:
             else:
                 grid_color[j][x_val] = 3          
             validate()
+        for i in range(0,6):
+            count = 0
+            for j in range(0,6):
+                if grid_color[j][i] == 1:
+                    count += 1
+            if count == 6:
+                won_img.draw_popup()
+                won_flag = True
+                break
+            
+
     if x_cord != 7:
         flag2 = 0
 
