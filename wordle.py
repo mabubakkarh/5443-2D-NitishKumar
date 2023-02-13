@@ -28,7 +28,7 @@ RED   = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-ORANGE = (255,97,3)
+ORANGE = (252, 194, 3)
 
 
 font1 = pygame.font.SysFont("comicsans",40)
@@ -48,7 +48,6 @@ with open('words.csv', mode='r') as infile:
     
 
 num = random.randint(1,140)
-# num = 32
 print(guessWord[num])
 
 grid = [
@@ -153,13 +152,15 @@ heading.draw_popup()
 
 intro_msg = pop_up('welcome_msg.png', 250, 100, 375,400)
 
-ques_mark_img = pop_up('question_mark.png',50, 50,900,30)
+ques_mark_img = pop_up('question_mark.png',50, 50,930,195)
 ques_mark_img.draw_popup()
 
-info_img = pop_up('Instructions.png', 500, 590, 250,203)
-close_img =  pop_up('close.png', 36, 36, 710,202)
+# info_img = pop_up('Instructions.png', 500, 590, 250,203)
+# info_img = pop_up('Instruction2.png', 500, 200, 250,0)
+info_img = pop_up('Instruction2.png', 450, 95, 280,702)
+close_img =  pop_up('close.png', 36, 36, 695,701)
 
-won_img = pop_up('won.png', 300, 200, 350,350)
+won_img = pop_up('won.png', 300, 200, 600,450)
 # won_img = pop_up('won.png', 500, 700, 350,350)
 
 
@@ -167,7 +168,6 @@ run = True
 flag1 = 0
 flag2 = 0
 t_flag = 0
-info_flag = 0
 won_flag = False
 
 
@@ -264,18 +264,26 @@ while run:
             
     x_cord = int(x)
     y_cord = int(y)
+    for i in range(0,6):
+        count = 0
+        for j in range(0,6):
+            if grid_color[i][j] == 1:
+                count += 1
+        if count == 6:
+            won_img.draw_popup()
+            won_flag = True
+            print('executed!!')
+            break
 
+    # draw()
 
-    if x == 9 and y == 0:
+    if x == 9 and y == 2:
         info_img.draw_popup()
         close_img.draw_popup()
-        info_flag = 1
-    if x == 7 and y == 2:
-        info_flag = 0
 
     if (x_cord >=2 and x_cord <=7) and ((y_cord >=2 and y_cord <=7)):
         # print(x_cord,' and ',y_cord)
-        if flag1 == 1 and info_flag == 0 and not(won_flag):
+        if flag1 == 1 and not(won_flag):
             draw_box()
         if value != 0:
             if (y_cord-2) >= var_j_val+1:
@@ -295,14 +303,6 @@ while run:
             else:
                 grid_color[j][x_val] = 3          
             validate()
-            for i in range(0,6):
-                won_flag = False
-                for j in range(0,6):
-                    if grid_color[i][j] == 1:
-                            won_flag = True
-                    if won_flag:
-                        won_img.draw_popup()
-                        break
     if x_cord != 7:
         flag2 = 0
 
