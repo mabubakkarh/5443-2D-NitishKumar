@@ -1,3 +1,6 @@
+############# Worldy Game with Python Pygame #############
+############# Md Abubakkar & Ereli Nitish Kumar ##########
+
 import pygame, sys, random
 from pygame.locals import *
 import csv
